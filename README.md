@@ -6,7 +6,7 @@ Binary runtime artifacts for OpenClaw ERP customer deployments.
 
 - Runtime: OpenClaw 2026.6.8 ERP custom runtime
 - Artifact: `releases/2026.6.8-erp-20260623-line-observability/openclaw-runtime-2026.6.8-erp-latest.tar.gz`
-- SHA256: `0815ca746da1363615d41432b1488c7a0b87274b063784524793718f2fcacbc5`
+- SHA256: `54c3672d4f1eb0c7b275c23210e128ef9004e5244b3ada0ed39db1a12fd5c214`
 
 Download on customer server:
 
@@ -21,5 +21,5 @@ sha256sum openclaw-runtime-2026.6.8-erp-latest.tar.gz
 Expected checksum:
 
 ```text
-0815ca746da1363615d41432b1488c7a0b87274b063784524793718f2fcacbc5  openclaw-runtime-2026.6.8-erp-latest.tar.gz
+54c3672d4f1eb0c7b275c23210e128ef9004e5244b3ada0ed39db1a12fd5c214  openclaw-runtime-2026.6.8-erp-latest.tar.gz
 ```
