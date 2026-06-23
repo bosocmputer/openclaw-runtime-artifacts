@@ -13,7 +13,7 @@ Download on customer server:
 ```bash
 cd /root
 curl -fL -o openclaw-runtime-2026.6.8-erp-latest.tar.gz \
-  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.8-erp-20260623-line-observability/openclaw-runtime-2026.6.8-erp-latest.tar.gz
+  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/d1be03c3542b69a4a896f90a7ba66ab2b00ae97d/releases/2026.6.8-erp-20260623-line-observability/openclaw-runtime-2026.6.8-erp-latest.tar.gz
 
 sha256sum openclaw-runtime-2026.6.8-erp-latest.tar.gz
 ```
