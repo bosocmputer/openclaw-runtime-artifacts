@@ -35,13 +35,38 @@ Expected checksum:
 a26156d0440b4d6010d89c98a94cdefa8f0d51693762874bde0d607175f94a99  openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz
 ```
 
-Apply to a base runtime directory and verify:
+Apply to an existing 2026.6.11 base runtime directory and verify:
 
 ```bash
 RUNTIME=/root/openclaw-runtime-2026.6.11-erp
+node "$RUNTIME/dist/index.js" --version | grep 'OpenClaw 2026.6.11' \
+  || { echo "base runtime is not 2026.6.11; build/install the full runtime first"; exit 1; }
+
 tar -xzf /root/openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz -C "$RUNTIME"
-node "$RUNTIME/dist/index.js" --version || true
 grep -R "textWindowMs.*0\\|line_burst_preflight\\|line_delivery_attempt" -n "$RUNTIME/dist" | head -30
 ```
 
-This tarball is an overlay, not a standalone full runtime package. It expects an existing runtime skeleton with `node_modules`. On servers upgraded from the 2026.6.8 ERP skeleton, `node ... --version` may still print `OpenClaw 2026.6.8`; verify the release by checksum, target path, overlay markers, and LINE/Telegram smoke tests.
+This tarball is an overlay, not a standalone full runtime package. It expects an existing 2026.6.11 runtime with `node_modules`. Do not use it as the only upgrade step from a 2026.6.8 skeleton when enabling newer runtime capabilities such as `ollama-cloud`.
+
+If the customer server cannot receive a full tarball, build the pinned runtime from source on the server:
+
+```bash
+cd /root
+git clone --depth 1 \
+  --branch codex/openclaw-2026.6.11-erp-line-burst \
+  https://github.com/bosocmputer/openclaw.git \
+  /root/openclaw-runtime-2026.6.11-erp.new
+
+cd /root/openclaw-runtime-2026.6.11-erp.new
+corepack enable
+corepack prepare pnpm@11.2.2 --activate
+pnpm install --frozen-lockfile
+pnpm build:docker
+node dist/index.js --version
+```
+
+Expected version gate for full runtime installs:
+
+```text
+OpenClaw 2026.6.11 (fe43292)
+```

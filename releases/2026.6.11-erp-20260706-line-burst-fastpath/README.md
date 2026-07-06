@@ -24,9 +24,26 @@ Included runtime changes:
 
 Operational notes:
 
-- Apply on top of base runtime directory `/root/openclaw-runtime-2026.6.11-erp`.
-- This package is an overlay, not a standalone full runtime. It expects the target runtime directory to already contain runtime dependencies such as `node_modules`.
+- Apply on top of a real 2026.6.11 base runtime directory `/root/openclaw-runtime-2026.6.11-erp`.
+- This package is an overlay, not a standalone full runtime. It expects the target runtime directory to already contain 2026.6.11 runtime dependencies such as `node_modules`.
 - Set `OPENCLAW_BIN=/root/openclaw-runtime-2026.6.11-erp/dist/index.js` in `openclaw-api/.env`.
 - Kill switch: set `OPENCLAW_LINE_COALESCING=0` and restart gateway.
-- If `node dist/index.js --version` still prints `OpenClaw 2026.6.8` on a legacy skeleton, verify with marker grep instead: `line_burst_preflight`, `line_delivery_attempt`, and `textWindowMs`.
+- If `node dist/index.js --version` still prints `OpenClaw 2026.6.8`, the server is still on a legacy base runtime. That may be acceptable only for a LINE-only emergency overlay patch. It is not acceptable when enabling newer providers such as `ollama-cloud`; build/install the full 2026.6.11 runtime first.
 - Dynamic ERP facts such as price, stock, cost, availability, credit, and substitute products must still come from MCP/SML tools, not memory.
+
+Full runtime fallback when no full tarball is available:
+
+```bash
+cd /root
+git clone --depth 1 \
+  --branch codex/openclaw-2026.6.11-erp-line-burst \
+  https://github.com/bosocmputer/openclaw.git \
+  /root/openclaw-runtime-2026.6.11-erp.new
+
+cd /root/openclaw-runtime-2026.6.11-erp.new
+corepack enable
+corepack prepare pnpm@11.2.2 --activate
+pnpm install --frozen-lockfile
+pnpm build:docker
+node dist/index.js --version
+```
