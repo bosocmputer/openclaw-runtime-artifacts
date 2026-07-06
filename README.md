@@ -2,41 +2,43 @@
 
 Binary runtime artifacts for OpenClaw ERP customer deployments.
 
-## Latest ERP Runtime
+## Latest ERP Runtime Overlay
 
-- Runtime: OpenClaw 2026.6.8 ERP custom runtime
-- Source commit: `1c81b77460` (`Add generic LINE burst coalescing`)
-- Version output: `OpenClaw 2026.6.8 (1c81b77)`
-- Artifact: `releases/2026.6.8-erp-20260624-line-burst-coalescing/openclaw-runtime-2026.6.8-erp-latest.tar.gz`
-- SHA256: `1f4ca1e96d6ea84b7e26da1091f323a50c39e023c18c1e36a100966d55e291e7`
+- Runtime baseline: OpenClaw 2026.6.11 ERP runtime
+- Source repo: `bosocmputer/openclaw`
+- Source branch: `codex/openclaw-2026.6.11-erp-line-burst`
+- Source commit: `fe432925eb` (`fix(line): avoid delaying standalone text turns`)
+- Artifact: `releases/2026.6.11-erp-20260706-line-burst-fastpath/openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz`
+- SHA256: `a26156d0440b4d6010d89c98a94cdefa8f0d51693762874bde0d607175f94a99`
 
 Included production behavior:
 
 - Generic LINE burst coalescing for image + rapid follow-up text.
 - LINE text-only messages dispatch immediately.
 - LINE `/reset`, `/new`, and control commands bypass/cancel pending bursts.
-- Structured markers: `line_burst_start`, `line_burst_append`, `line_burst_flush`, `line_burst_bypass`.
 - Kill switch: set `OPENCLAW_LINE_COALESCING=0` and restart gateway.
 
 Download on customer server:
 
 ```bash
 cd /root
-curl -fL -o openclaw-runtime-2026.6.8-erp-latest.tar.gz \
-  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/3ede1322c6651657dee4546bcade6efb9e4f7fcd/releases/2026.6.8-erp-20260624-line-burst-coalescing/openclaw-runtime-2026.6.8-erp-latest.tar.gz
+curl -fL -o openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz \
+  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.11-erp-20260706-line-burst-fastpath/openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz
 
-sha256sum openclaw-runtime-2026.6.8-erp-latest.tar.gz
+sha256sum openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz
 ```
 
 Expected checksum:
 
 ```text
-1f4ca1e96d6ea84b7e26da1091f323a50c39e023c18c1e36a100966d55e291e7  openclaw-runtime-2026.6.8-erp-latest.tar.gz
+a26156d0440b4d6010d89c98a94cdefa8f0d51693762874bde0d607175f94a99  openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz
 ```
 
-Verify after extraction:
+Apply to a base runtime directory and verify:
 
 ```bash
-node /root/openclaw-runtime-2026.6.8-erp/dist/index.js --version
-# OpenClaw 2026.6.8 (1c81b77)
+RUNTIME=/root/openclaw-runtime-2026.6.11-erp
+tar -xzf /root/openclaw-runtime-2026.6.11-erp-line-burst-fe432925.tgz -C "$RUNTIME"
+node "$RUNTIME/dist/index.js" --version
+# OpenClaw 2026.6.11
 ```
