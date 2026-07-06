@@ -25,6 +25,8 @@ Included runtime changes:
 Operational notes:
 
 - Apply on top of base runtime directory `/root/openclaw-runtime-2026.6.11-erp`.
+- This package is an overlay, not a standalone full runtime. It expects the target runtime directory to already contain runtime dependencies such as `node_modules`.
 - Set `OPENCLAW_BIN=/root/openclaw-runtime-2026.6.11-erp/dist/index.js` in `openclaw-api/.env`.
 - Kill switch: set `OPENCLAW_LINE_COALESCING=0` and restart gateway.
+- If `node dist/index.js --version` still prints `OpenClaw 2026.6.8` on a legacy skeleton, verify with marker grep instead: `line_burst_preflight`, `line_delivery_attempt`, and `textWindowMs`.
 - Dynamic ERP facts such as price, stock, cost, availability, credit, and substitute products must still come from MCP/SML tools, not memory.
