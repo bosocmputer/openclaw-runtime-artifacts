@@ -4,6 +4,39 @@ Binary runtime artifacts for OpenClaw ERP customer deployments.
 
 ## Latest ERP Runtime Overlay
 
+- Overlay release: `2026.6.11-erp-20260708-agent-brain-original-text`
+- Target runtime dir: `/root/openclaw-runtime-2026.6.11-erp`
+- Source repo: `bosocmputer/openclaw`
+- Source branch: `codex/openclaw-2026.6.11-erp-line-burst`
+- Source commit: `fd8e3383ea` (`fix(runtime): preserve original text for brain evidence`)
+- Artifact: `releases/2026.6.11-erp-20260708-agent-brain-original-text/openclaw-runtime-2026.6.11-erp-agent-brain-original-text-fd8e338.tgz`
+- SHA256: `76b98cb2d68c0176522f92272f3c0483a57bfe5a680cd9d3eb45d2fe709cceec`
+
+This small overlay must be applied after the base `2026.6.11` ERP runtime and the Agent Brain tool-evidence overlay below. It prevents the managed `## Agent Knowledge Brain` context block from being posted back into learning/conversation evidence as if it were user text.
+
+Download and apply:
+
+```bash
+cd /root
+curl -fL -o openclaw-runtime-2026.6.11-erp-agent-brain-original-text-fd8e338.tgz \
+  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.11-erp-20260708-agent-brain-original-text/openclaw-runtime-2026.6.11-erp-agent-brain-original-text-fd8e338.tgz
+
+echo "76b98cb2d68c0176522f92272f3c0483a57bfe5a680cd9d3eb45d2fe709cceec  openclaw-runtime-2026.6.11-erp-agent-brain-original-text-fd8e338.tgz" | sha256sum -c -
+
+RUNTIME=/root/openclaw-runtime-2026.6.11-erp
+node "$RUNTIME/dist/index.js" --version | grep 'OpenClaw 2026.6.11' \
+  || { echo "base runtime is not 2026.6.11"; exit 1; }
+
+STAMP=$(date +%Y%m%d-%H%M%S)
+cp -a "$RUNTIME/dist" "$RUNTIME/dist.bak-agent-brain-original-text-$STAMP"
+tar -xzf /root/openclaw-runtime-2026.6.11-erp-agent-brain-original-text-fd8e338.tgz -C "$RUNTIME"
+grep -R "AgentBrainOriginalUserText" -n "$RUNTIME/dist"/agent-brain-runtime-*.js | head -20
+```
+
+Then restart the gateway with the normal customer service command.
+
+## Previous ERP Runtime Overlay
+
 - Overlay release: `2026.6.11-erp-20260708-agent-brain-tool-evidence`
 - Target runtime dir: `/root/openclaw-runtime-2026.6.11-erp`
 - Source repo: `bosocmputer/openclaw`
