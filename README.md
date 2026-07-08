@@ -4,13 +4,13 @@ Binary runtime artifacts for OpenClaw ERP customer deployments.
 
 ## Latest ERP Runtime Overlay
 
-- Overlay release: `2026.6.11-erp-20260708-agent-brain`
+- Overlay release: `2026.6.11-erp-20260708-agent-brain-postturn`
 - Target runtime dir: `/root/openclaw-runtime-2026.6.11-erp`
 - Source repo: `bosocmputer/openclaw`
 - Source branch: `codex/openclaw-2026.6.11-erp-line-burst`
-- Source commit: `f9066817dc` (`feat(runtime): add agent brain channel hooks`)
-- Artifact: `releases/2026.6.11-erp-20260708-agent-brain/openclaw-runtime-2026.6.11-erp-agent-brain-f906681.tgz`
-- SHA256: `27db98b04077184570f459a02ce3492a28d0196fa92a1755453e5c15780fb798`
+- Source commit: `0a1e44eccd` (`feat(runtime): post agent brain turn evidence`)
+- Artifact: `releases/2026.6.11-erp-20260708-agent-brain-postturn/openclaw-runtime-2026.6.11-erp-agent-brain-0a1e44e.tgz`
+- SHA256: `cdd9e719dcde587390cf51bab6218999d30e6d092378d78b54d72a06fbadee8f`
 
 Included production behavior:
 
@@ -18,6 +18,7 @@ Included production behavior:
 - LINE text-only messages dispatch immediately.
 - LINE `/reset`, `/new`, and control commands bypass/cancel pending bursts.
 - Bounded, fail-open Agent Knowledge Brain lookup before LINE/Telegram dispatch.
+- Post-turn Agent Brain evidence capture from final LINE/Telegram answer text.
 - Optional staff/internal SML description suggestions from API channel policy.
 - Kill switch: set `OPENCLAW_LINE_COALESCING=0` and restart gateway.
 - Brain rollback: set `AGENT_BRAIN_ENABLED=0` and restart gateway.
@@ -26,16 +27,16 @@ Download on customer server:
 
 ```bash
 cd /root
-curl -fL -o openclaw-runtime-2026.6.11-erp-agent-brain-f906681.tgz \
-  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.11-erp-20260708-agent-brain/openclaw-runtime-2026.6.11-erp-agent-brain-f906681.tgz
+curl -fL -o openclaw-runtime-2026.6.11-erp-agent-brain-0a1e44e.tgz \
+  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.11-erp-20260708-agent-brain-postturn/openclaw-runtime-2026.6.11-erp-agent-brain-0a1e44e.tgz
 
-sha256sum openclaw-runtime-2026.6.11-erp-agent-brain-f906681.tgz
+sha256sum openclaw-runtime-2026.6.11-erp-agent-brain-0a1e44e.tgz
 ```
 
 Expected checksum:
 
 ```text
-27db98b04077184570f459a02ce3492a28d0196fa92a1755453e5c15780fb798  openclaw-runtime-2026.6.11-erp-agent-brain-f906681.tgz
+cdd9e719dcde587390cf51bab6218999d30e6d092378d78b54d72a06fbadee8f  openclaw-runtime-2026.6.11-erp-agent-brain-0a1e44e.tgz
 ```
 
 Apply to an existing 2026.6.11 base runtime directory and verify:
@@ -45,8 +46,8 @@ RUNTIME=/root/openclaw-runtime-2026.6.11-erp
 node "$RUNTIME/dist/index.js" --version | grep 'OpenClaw 2026.6.11' \
   || { echo "base runtime is not 2026.6.11; build/install the full runtime first"; exit 1; }
 
-tar -xzf /root/openclaw-runtime-2026.6.11-erp-agent-brain-f906681.tgz -C "$RUNTIME"
-grep -R "agent_brain_runtime\\|Agent Knowledge Brain\\|line_burst_preflight\\|line_delivery_attempt" -n "$RUNTIME/dist" | head -30
+tar -xzf /root/openclaw-runtime-2026.6.11-erp-agent-brain-0a1e44e.tgz -C "$RUNTIME"
+grep -R "agent_brain_runtime\\|agent_brain_post\\|Agent Knowledge Brain\\|line_burst_preflight\\|line_delivery_attempt" -n "$RUNTIME/dist" | head -30
 ```
 
 This tarball is an overlay, not a standalone full runtime package. It expects an existing 2026.6.11 runtime with `node_modules`. Do not use it as the only upgrade step from a 2026.6.8 skeleton when enabling newer runtime capabilities such as `ollama-cloud`.
@@ -94,5 +95,5 @@ node dist/index.js --version
 Expected version gate for full runtime installs:
 
 ```text
-OpenClaw 2026.6.11 (f906681)
+OpenClaw 2026.6.11 (0a1e44e)
 ```
