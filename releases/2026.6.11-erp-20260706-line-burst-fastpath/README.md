@@ -30,6 +30,7 @@ Operational notes:
 - Kill switch: set `OPENCLAW_LINE_COALESCING=0` and restart gateway.
 - If `node dist/index.js --version` still prints `OpenClaw 2026.6.8`, the server is still on a legacy base runtime. That may be acceptable only for a LINE-only emergency overlay patch. It is not acceptable when enabling newer providers such as `ollama-cloud`; build/install the full 2026.6.11 runtime first.
 - Dynamic ERP facts such as price, stock, cost, availability, credit, and substitute products must still come from MCP/SML tools, not memory.
+- Agent Knowledge Brain v1 ships through `openclaw-api` and `openclaw-admin`. Safe active knowledge is still synced into the OpenClaw `MEMORY.md` managed block consumed by memory-core. Runtimes built after the Agent Brain patch can additionally call `/api/agent-brain/evaluate-turn` before LINE/Telegram dispatch when `AGENT_BRAIN_ENABLED=1`; the direct lookup is bounded, fail-open, and should be rolled back with `AGENT_BRAIN_ENABLED=0` if needed.
 
 Full runtime fallback when no full tarball is available:
 
