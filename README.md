@@ -4,13 +4,13 @@ Binary runtime artifacts for OpenClaw ERP customer deployments.
 
 ## Latest ERP Runtime Overlay
 
-- Overlay release: `2026.6.11-erp-20261002-image-model-lock`
+- Overlay release: `2026.6.11-erp-20261002-image-model-lock-v2`
 - Target runtime dir: `/root/openclaw-runtime-2026.6.11-erp`
 - Source repo: `bosocmputer/openclaw`
 - Source branch: `codex/image-tool-monitor-telemetry`
 - Source commit: `f596f67f80` (`fix: lock configured image model`)
-- Artifact: `releases/2026.6.11-erp-20261002-image-model-lock/openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67.tgz`
-- SHA256: `77feecfba253c148f11bce5aed3cb0372fff29ea91b0ec56bdbe1075d999a4da`
+- Artifact: `releases/2026.6.11-erp-20261002-image-model-lock-v2/openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67-v2.tgz`
+- SHA256: `b288d49e5331d96820acae54e687bc942d898986a7afc963407c86bbe66c02d8`
 
 This full `dist` overlay must be applied to an existing `2026.6.11` ERP runtime. It preserves the prior ERP behavior and locks the image tool to the explicit `agents.defaults.imageModel` configuration. When that configuration is present, model-call overrides are ignored and omitted from the tool schema, so the configured primary/fallback chain is the only image-model path. Image content, prompts, and credentials are not written to Monitor telemetry.
 
@@ -18,18 +18,18 @@ Download and apply:
 
 ```bash
 cd /root
-curl -fL -o openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67.tgz \
-  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.11-erp-20261002-image-model-lock/openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67.tgz
+curl -fL -o openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67-v2.tgz \
+  https://raw.githubusercontent.com/bosocmputer/openclaw-runtime-artifacts/main/releases/2026.6.11-erp-20261002-image-model-lock-v2/openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67-v2.tgz
 
-echo "77feecfba253c148f11bce5aed3cb0372fff29ea91b0ec56bdbe1075d999a4da  openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67.tgz" | sha256sum -c -
+echo "b288d49e5331d96820acae54e687bc942d898986a7afc963407c86bbe66c02d8  openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67-v2.tgz" | sha256sum -c -
 
 RUNTIME=/root/openclaw-runtime-2026.6.11-erp
 node "$RUNTIME/dist/index.js" --version | grep 'OpenClaw 2026.6.11' \
   || { echo "base runtime is not 2026.6.11"; exit 1; }
 
 STAMP=$(date +%Y%m%d-%H%M%S)
-cp -a "$RUNTIME/dist" "$RUNTIME/dist.bak-image-model-lock-$STAMP"
-tar -xzf /root/openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67.tgz -C "$RUNTIME"
+cp -a "$RUNTIME/dist" "$RUNTIME/dist.bak-image-model-lock-v2-$STAMP"
+tar -xzf /root/openclaw-runtime-2026.6.11-erp-image-model-lock-f596f67-v2.tgz -C "$RUNTIME"
 node "$RUNTIME/dist/index.js" --version
 ```
 
